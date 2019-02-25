@@ -1,0 +1,23 @@
+{
+  "name": "hustler",
+  "version": "1.0.0",
+  "description": "短线炒股助手\r ## 描述\r 在交易日，用户添加股票代码和阈值，`Hustler`监控当日个股走势和交易量，如有超出阈值的部分将会提示用户。",
+  "main": "index.js",
+  "dependencies": {
+    "puppeteer": "^1.12.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mytac/Hustler.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mytac/Hustler/issues"
+  },
+  "homepage": "https://github.com/mytac/Hustler#readme"
+}
