@@ -1,4 +1,4 @@
-function createError({ msg = '' }) {
+function createError(msg = '') {
 	const err = new Error();
 	err.msg = msg;
 }
