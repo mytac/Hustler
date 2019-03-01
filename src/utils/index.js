@@ -1,4 +1,3 @@
-// const createError = require('createError')
 const { writeFile, readFile } = require('./fs');
 const { createError } = require('./createError');
 

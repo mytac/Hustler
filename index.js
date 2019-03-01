@@ -3,9 +3,9 @@ http://www.r9it.com/20171106/puppeteer.html
 */
 const puppeteer = require('puppeteer');
 const configs = require('./config');
-const { createError } = require('./src/utils');
+const { polling } = require('./src/core');
 
-const { BASE_URL, POLL_TIME, STOCK_LIST } = configs;
+const { BASE_URL, STOCK_LIST } = configs;
 
 (async () => {
 	const browser = await (puppeteer.launch({
@@ -24,32 +24,6 @@ const { BASE_URL, POLL_TIME, STOCK_LIST } = configs;
 		page.code = url;
 		await page.goto(BASE_URL + url + '.html');
 	}
-
-
-
-	function polling(page, i = 0) {
-		return new Promise((resolve, reject) => {
-			const el = page.$('#price9');
-			if (el) { resolve(page); }
-			reject(createError('未找到目标dom'));
-		})
-			.then(page => page.$eval('#price9', input => input.innerText))
-			.then((price) => {
-				console.log(`code ${page.code} - price  ${price}`);
-				return new Promise((resolve) => {
-					setTimeout(() => {
-						resolve();
-					}, POLL_TIME);
-				});
-			})
-			.then(() => polling(page, i + 1))
-			.catch(err => {
-				if (err && err.msg) {
-					console.error(err.msg);
-				}
-			});
-	}
-
 
 	const pages = await browser.pages();
 	const pollingRequests = pages.map(page => page.code && polling(page));
