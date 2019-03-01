@@ -1,5 +1,5 @@
 
-const { createError } = require('../utils');
+const { createError,getNowDate,readFile,writeFile } = require('../utils');
 const { POLL_TIME } = require('../../config');
 
 function polling(page, i = 0) {
@@ -8,6 +8,7 @@ function polling(page, i = 0) {
 		if (el) { resolve(page); }
 		reject(createError('未找到目标dom'));
 	})
+		.then(page=>i===0?getFinalPrice(page):page)
 		.then(page => page.$eval('#price9', input => input.innerText))
 		.then((price) => {
 			console.log(`code ${page.code} - price  ${price}`);
@@ -25,6 +26,26 @@ function polling(page, i = 0) {
 		});
 }
 
+// 获取前日成交价，只在i=0时获取
+async function getFinalPrice(page){
+	const filename='./cache.json';
+	try{
+		const finalPrice=await page.$eval('#gt8', input => input.innerText);
+		console.log('final price',finalPrice);
+
+		const now=getNowDate();
+		const stockObj={[page.code]:finalPrice};
+		const prevData=JSON.parse(await readFile(filename));
+		const currentDay=prevData[now]||{};
+		prevData[now]={...currentDay,...stockObj};
+
+		await writeFile(filename,JSON.stringify(prevData));
+		return page;
+	}catch(e){
+		console.log(e);
+	}
+}
+
 module.exports = {
-	polling
+	polling,getFinalPrice
 };

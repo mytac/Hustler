@@ -16,7 +16,7 @@ const { BASE_URL, STOCK_LIST } = configs;
 		// 打开开发者工具, 当此值为true时, headless总为false
 		devtools: false,
 		// 关闭headless模式, 不会打开浏览器
-		headless: true
+		headless: false
 	}));
 
 	for (const url of STOCK_LIST) {
@@ -26,6 +26,7 @@ const { BASE_URL, STOCK_LIST } = configs;
 	}
 
 	const pages = await browser.pages();
-	const pollingRequests = pages.map(page => page.code && polling(page));
+	const pollingRequests = pages.filter(page => !!page.code).map(p=>polling(p));
+	console.log('pollingRequests length',pollingRequests.length);
 	Promise.all(pollingRequests);
 })();
