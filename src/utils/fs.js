@@ -12,7 +12,7 @@ function readFile(filename, decodeType = 'utf-8') {
 	});
 }
 
-function writeFile(filename, data ) {
+function writeFile(filename, data) {
 	return new Promise((resolve, reject) => {
 		fs.writeFile(`${filename}`, data, function (err) {
 			if (err) {
@@ -24,14 +24,15 @@ function writeFile(filename, data ) {
 	});
 }
 
-async function updateJSONFile({newContent={},filename='',path = __dirname, decodeType = 'utf-8'}){
-	try{
-		const prevContent=JSON.parse(await readFile(filename,path , decodeType));
-		Object.keys(newContent).forEach((k)=>{
-			prevContent[k]=newContent[k];
+async function updateJSONFile({ newContent = {}, filename = '', path = __dirname, decodeType = 'utf-8' }) {
+	try {
+		const prevContent = await readFile(filename, path, decodeType);
+		console.log('prevContent', prevContent);
+		Object.keys(newContent).forEach((k) => {
+			prevContent[k] = newContent[k];
 		});
-		await writeFile(filename,JSON.stringify(prevContent),path);
-	}catch(e){
+		await writeFile(filename, JSON.stringify(prevContent), path);
+	} catch (e) {
 		console.error(e);
 	}
 }
